@@ -34,19 +34,23 @@ exports.githubCallback = (req, res, next) => {
 
     // Fetch repositories from GitHub using the accessToken
     try {
-      const repos = await axios.get("https://api.github.com/user/repos", {
-        headers: {
-          Authorization: `token ${user.accessToken}`,
+      const repos = await axios.get(
+        "https://api.github.com/user/repos?per_page=100",
+        {
+          headers: {
+            Authorization: `token ${user.accessToken}`,
+          },
         },
-      });
+      );
 
       // Store user and repositories in session
       req.session.user = user;
-      // req.session.repos = repos.data.map((repo) => repo.name);
       req.session.repos = repos.data;
+      console.log(
+        "Got repos: ",
+        repos.data.map((repo) => repo.name),
+      );
 
-      // Redirect to the repositories page to display repos
-      // const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
       return res.redirect(`/repositories`);
     } catch (error) {
       console.error("Error fetching repositories:", error);

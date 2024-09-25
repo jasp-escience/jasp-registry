@@ -1,3 +1,9 @@
+# Vite
+dist/
+
+# vscode
+.vscode/
+
 # Logs
 logs
 *.log

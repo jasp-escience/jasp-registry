@@ -1,6 +1,8 @@
 const express = require("express");
 const session = require("express-session");
 // const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
@@ -9,9 +11,11 @@ const dotenv = require("dotenv");
 dotenv.config(); // Load environment variables from a .env file
 require("./config/passport"); // Import the Passport configuration
 
-const app = express();
 const PORT = process.env.PORT || 8080;
 
+const app = express();
+app.use(express.json());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public/dist")));
 
 // // Enable CORS with credentials. needed for session handling in development mode.

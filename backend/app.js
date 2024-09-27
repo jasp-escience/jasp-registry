@@ -29,13 +29,13 @@ app.use(express.static(path.join(__dirname, "public/dist")));
 // Session configuration
 app.use(
   session({
-    secret: "your-secret-key",
+    secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
       secure: false, // Set to true if you're using HTTPS in production
-      sameSite: "lax", // Ensures cookies are sent on cross-origin requests
+      sameSite: "strict", // Ensures cookies are sent on cross-origin requests
     },
   }),
 );

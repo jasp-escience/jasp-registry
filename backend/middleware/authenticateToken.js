@@ -2,7 +2,12 @@ const jwt = require("jsonwebtoken");
 
 // Middleware to verify JWT from HttpOnly cookie
 function authenticateToken(req, res, next) {
-  const token = req.cookies.token;
+  // Depends where the token is stored. In Session it is stored on the server side.
+  // In cookie it is stored on the client side.
+  // In this case, we are storing the token in the session.
+  const token = req.session.token;
+  // const token = req.cookies.token;
+  console.log("Token:", token);
 
   if (!token) {
     // If no token, return a 401 Unauthorized response

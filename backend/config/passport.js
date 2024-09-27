@@ -20,6 +20,7 @@ passport.use(
       // console.log("Username:", profile.username);
       // console.log("ID:", profile.id);
       // console.log("Emails:", profile.emails);
+      // console.log("Profile:", profile);
 
       profile.accessToken = accessToken;
       profile.refreshToken = refreshToken;

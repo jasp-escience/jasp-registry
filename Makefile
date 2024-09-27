@@ -3,7 +3,6 @@ REMOTE_HOST=jaspmod
 REMOTE_DIR=app-nodejs/
 PROJECT_DIR=.
 OLD_PATH=$(PATH)
-.PHONY: _kill _run-remote clean run-remote
 
 # Default target
 all: deploy
@@ -22,20 +21,22 @@ install:
 	make build
 
 run:
-	npm start
+	npm run dev
 
 # Customize these for your remote server
+.PHONY: _run-remote 
 _run-remote: export NVM_DIR=$(HOME)/.nvm
 _run-remote: export NVM_BIN=$(NVM_DIR)/versions/node/v22.8.0/bin
 _run-remote: export PATH=$(NVM_BIN):$(shell printenv PATH)
 _run-remote: _kill
-		# printenv
 		npm install
-		npm start
+		npm run dev
 
+.PHONY: _kill
 _kill:
-	-ps aux | grep server | grep -v grep | awk '{print $$2}' | xargs kill -9 > /dev/null 2>&1
+	-ps aux | grep 'node backend/app.js' | grep -v grep | awk '{print $$2}' | xargs kill -9 > /dev/null 2>&1
 
+.PHONY: run-remote
 run-remote: frontend deploy
 	 #ssh $(REMOTE_HOST) "source ~/.bashrc; cd $(REMOTE_DIR); make run"
 	 ssh -t $(REMOTE_HOST) "cd $(REMOTE_DIR); make _run-remote"

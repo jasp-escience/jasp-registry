@@ -1,7 +1,9 @@
 <template>
   <div class="repositories-container">
     <h1>Your GitHub Repositories</h1>
-    <p v-if="!repositories.length">
+    <!-- Show loading message while fetching repositories -->
+    <p v-if="loading">Fetching repositories...</p>
+    <p v-if="!loading && !repositories.length">
       No repositories available or you need to log in.
     </p>
     <ul v-if="repositories.length">
@@ -20,6 +22,7 @@ export default {
   data() {
     return {
       repositories: [],
+      loading: true,
     };
   },
   async created() {
@@ -27,13 +30,13 @@ export default {
       const response = await axios.get("/api/v1/repositories/list", {
         withCredentials: true,
       });
-      console.log("Repositories fetched:", response.data.repositories);
-      console.log(response);
       this.repositories = response.data.repositories;
     } catch (error) {
       console.error("Error fetching repositories:", error);
       // Optionally redirect to login page if not authenticated
-      this.$router.push("/");
+      // this.$router.push("/");
+    } finally {
+      this.loading = false;
     }
   },
 };

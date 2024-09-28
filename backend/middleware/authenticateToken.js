@@ -7,7 +7,6 @@ function authenticateToken(req, res, next) {
   // In this case, we are storing the token in the session.
   const token = req.session.token;
   // const token = req.cookies.token;
-  console.log("Token:", token);
 
   if (!token) {
     // If no token, return a 401 Unauthorized response

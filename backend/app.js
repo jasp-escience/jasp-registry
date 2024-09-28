@@ -1,12 +1,11 @@
 const express = require("express");
 const session = require("express-session");
-// const cors = require("cors");
-const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
 const repositoryRoutes = require("./routes/repositoryRoutes");
+const logger = require("./config/logger").logger;
 const dotenv = require("dotenv");
 dotenv.config(); // Load environment variables from a .env file
 require("./config/passport"); // Import the Passport configuration
@@ -17,14 +16,6 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public/dist")));
-
-// // Enable CORS with credentials. needed for session handling in development mode.
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173", // Allow requests from Vite's dev server
-//     credentials: true, // Allow cookies and credentials to be sent
-//   }),
-// );
 
 // Session configuration
 app.use(
@@ -57,5 +48,5 @@ app.get("*", (req, res) => {
 // Serve Vue frontend or other routes here
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  logger.info(`Server running on http://localhost:${PORT}`);
 });

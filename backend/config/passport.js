@@ -1,5 +1,6 @@
 const passport = require("passport");
 const GitHubStrategy = require("passport-github2").Strategy;
+const logger = require("./logger").logger;
 
 // Configure the GitHub strategy for use by Passport
 passport.use(
@@ -11,16 +12,7 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       // Here you can choose to store the user profile into a database
-      // For now, we’ll just pass the profile along
-      // console.log("Access Token:", accessToken); // Logs the access token
-      // console.log("Refresh Token:", refreshToken); // Logs the refresh token (if available)
-      // console.log("Profile:", JSON.stringify(profile)); // Logs the user profile data
-
-      // You can also log specific parts of the profile object
-      // console.log("Username:", profile.username);
-      // console.log("ID:", profile.id);
-      // console.log("Emails:", profile.emails);
-      // console.log("Profile:", profile);
+      logger.debug(`Github user ${profile.username} logged in`);
 
       profile.accessToken = accessToken;
       profile.refreshToken = refreshToken;

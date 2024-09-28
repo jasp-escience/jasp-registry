@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend/app.js"
+    "dev": "NODE_ENV=development node backend/app.js",
+    "prod": "PORT=80 NODE_ENV=production node backend/app.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",
-    "passport-github2": "^0.1.12"
+    "passport-github2": "^0.1.12",
+    "winston": "^3.14.2"
   }
 }

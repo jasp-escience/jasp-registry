@@ -3,11 +3,12 @@ const passport = require("passport");
 const authenticateToken = require("../middleware/authenticateToken");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const logger = require("../config/logger").logger;
 
 // Route to start GitHub login
 router.get("/check", authenticateToken, (req, res) => {
   const user = req.user; // User object from GitHub profile
-  console.log("User:", user);
+  logger.debug(`/check: user: ${user.username}`);
 
   res.status(200).json({
     username: user.username,
@@ -28,6 +29,7 @@ router.get(
   passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
     const user = req.user; // User object from GitHub profile
+    logger.debug(`/github/callback: user: ${user.username}`);
 
     // Generate a JWT token
     const token = jwt.sign(

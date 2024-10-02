@@ -2,7 +2,6 @@
 REMOTE_HOST=jaspmod
 REMOTE_DIR=app/
 PROJECT_DIR=.
-OLD_PATH=$(PATH)
 NODE_VERSION=22
 # Path to nvm (adjust if necessary)
 NVM_DIR = $(HOME)/.nvm

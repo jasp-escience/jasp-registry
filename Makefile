@@ -1,11 +1,35 @@
 # Variables
 REMOTE_HOST=jaspmod
-REMOTE_DIR=app-nodejs/
+REMOTE_DIR=app/
 PROJECT_DIR=.
 OLD_PATH=$(PATH)
+NODE_VERSION=22
+# Path to nvm (adjust if necessary)
+NVM_DIR = $(HOME)/.nvm
+
+# Load nvm
+NVM_SCRIPT = . $(NVM_DIR)/nvm.sh
+
+SHELL := /bin/bash
 
 # Default target
-all: deploy
+all: run-remote
+
+#Check if the Node version is installed and install it if not
+.PHONY: use_node
+use_node:
+	@# Check if the required Node.js version is installed using `nvm ls`
+	@echo "Checking Node.js version $(NODE_VERSION)..."
+	@$(NVM_SCRIPT) && nvm ls $(NODE_VERSION) > /dev/null 2>&1; \
+	if [ $$? -eq 0 ]; then \
+		echo "Node.js $(NODE_VERSION) is already installed."; \
+	else \
+		echo "Node.js $(NODE_VERSION) is not installed. Installing..."; \
+		$(NVM_SCRIPT) && nvm install $(NODE_VERSION); \
+	fi
+	@# Use the desired Node.js version
+	@echo "Using Node.js $(NODE_VERSION)..."
+	@$(NVM_SCRIPT) && nvm use $(NODE_VERSION)
 
 .PHONY: frontend
 frontend:
@@ -25,11 +49,9 @@ run:
 
 # Customize these for your remote server
 .PHONY: _run-remote 
-_run-remote: export NVM_DIR=$(HOME)/.nvm
-_run-remote: export NVM_BIN=$(NVM_DIR)/versions/node/v22.8.0/bin
-_run-remote: export PATH=$(NVM_BIN):$(shell printenv PATH)
-_run-remote: _kill
-		npm install
+_run-remote: _kill use_node
+		$(NVM_SCRIPT); \
+		npm install; \
 		npm run dev
 
 .PHONY: _kill

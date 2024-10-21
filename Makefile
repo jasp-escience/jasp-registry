@@ -14,6 +14,15 @@ SHELL := /bin/bash
 # Default target
 all: run-remote
 
+.PHONY: build-docker
+build-docker:
+	docker build -t jasp-mod/module-registry .
+
+/PHONY: run-docker
+run-docker: build-docker
+	docker stop module-registry || true
+	docker run -d --rm --name module-registry -p 8080:8080 -v ./:/usr/src/app -w /usr/src/app jasp-mod/module-registry bash -c "source ~/.nvm/nvm.sh && make run"
+
 #Check if the Node version is installed and install it if not
 .PHONY: use_node
 use_node:

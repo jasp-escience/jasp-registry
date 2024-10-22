@@ -19,17 +19,21 @@ build-docker:
 	docker build -t jasp-mod/module-registry .
 
 .PHONY: run-docker
-run-docker: build-docker
-	docker stop module-registry || true
+run-docker: build-docker stop-docker
 	docker run -d --rm --name module-registry --net jasp-network -p 8080:8080 -v ./:/usr/src/app -w /usr/src/app jasp-mod/module-registry bash -c "source ~/.nvm/nvm.sh && make run"
 
 .PHONY: stop-docker
 stop-docker:
 	docker stop module-registry || true
+	docker rm module-registry || true
 
 .PHONY: run-docker-remote
 run-docker-remote: deploy
 	ssh $(REMOTE_HOST) "cd $(REMOTE_DIR); make run-docker"
+
+.PHONY: stop-docker-remote
+stop-docker-remote:
+	ssh $(REMOTE_HOST) "cd $(REMOTE_DIR); make stop-docker"
 
 
 #Check if the Node version is installed and install it if not

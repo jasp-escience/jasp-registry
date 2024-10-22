@@ -32,13 +32,8 @@ RUN bash -c "source $NVM_DIR/nvm.sh && node -v && npm -v"
 # Set workdir
 WORKDIR /usr/src/app
 
-# Copy application files
-#COPY . .
-
 # Expose application port (optional, depending on the app)
 EXPOSE 8080
 
-# Start the application (if needed)
-# CMD ["node", "app.js"]
 
 

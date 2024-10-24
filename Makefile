@@ -14,6 +14,38 @@ SHELL := /bin/bash
 # Default target
 all: run-remote
 
+.PHONY: create-network
+create-network:
+	@if [ -z "$$(docker network ls --filter name=jasp-network --format '{{.Name}}')" ]; then \
+		docker network create jasp-network; \
+		echo "Docker network 'jasp-network' created."; \
+	else \
+		echo "Docker network 'jasp-network' already exists."; \
+	fi
+
+
+.PHONY: build-docker
+build-docker:
+	docker build -t jasp-mod/module-registry .
+
+.PHONY: run-docker
+run-docker: build-docker stop-docker create-network
+	docker run -d --rm --name module-registry --net jasp-network -p 8080:8080 -v ./:/usr/src/app -w /usr/src/app jasp-mod/module-registry bash -c "source ~/.nvm/nvm.sh && make run"
+
+.PHONY: stop-docker
+stop-docker:
+	docker stop module-registry || true
+	docker rm module-registry || true
+
+.PHONY: run-docker-remote
+run-docker-remote: deploy
+	ssh $(REMOTE_HOST) "cd $(REMOTE_DIR); make run-docker"
+
+.PHONY: stop-docker-remote
+stop-docker-remote:
+	ssh $(REMOTE_HOST) "cd $(REMOTE_DIR); make stop-docker"
+
+
 #Check if the Node version is installed and install it if not
 .PHONY: use_node
 use_node:

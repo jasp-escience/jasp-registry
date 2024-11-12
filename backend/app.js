@@ -18,22 +18,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public/dist")));
 
 // Session configuration
-app.use(
-  session({
-    secret: process.env.COOKIE_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // Set to true if you're using HTTPS in production
-      sameSite: "strict", // Ensures cookies are sent on cross-origin requests
-    },
-  }),
-);
+// app.use(
+//   session({
+//     secret: process.env.COOKIE_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false, // Set to true if you're using HTTPS in production
+//       sameSite: "strict", // Ensures cookies are sent on cross-origin requests
+//     },
+//   }),
+// );
+
+// Use cookie-parser middleware to parse cookies
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Initialize Passport and session handling
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 // API routes
 app.use("/api/v1/auth", authRoutes);

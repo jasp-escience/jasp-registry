@@ -69,12 +69,15 @@ frontend:
 	cp -r frontend/dist backend/public/
 
 # Step to build locally (optional)
+.PHONY: build
 build:
 	npm install
 
+.PHONY: install
 install:
 	make build
 
+.PHONY: run
 run:
 	npm run dev
 
@@ -95,6 +98,7 @@ run-remote: frontend deploy
 	 ssh -t $(REMOTE_HOST) "cd $(REMOTE_DIR); make _run-remote"
 
 # Step to deploy the project, build it remotely, and run it remotely
+.PHONY: deploy
 deploy:
 	# Use rsync to copy project to remote server, excluding the target folder
 	rsync -av --exclude node_modules $(PROJECT_DIR)/ $(REMOTE_HOST):$(REMOTE_DIR)

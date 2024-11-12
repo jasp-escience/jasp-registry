@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("../config/crypto");
 
 // Middleware to verify JWT from HttpOnly cookie
 function authenticateToken(req, res, next) {
@@ -19,9 +20,13 @@ function authenticateToken(req, res, next) {
       // If token is invalid, return a 403 Forbidden response
       return res.sendStatus(403);
     }
+    const iv = user.iv;
+
+    const decryptData = JSON.parse(crypto.decrypt(user.data, iv));
 
     // If valid, attach the user information to the request
     req.user = user;
+    req.user.accessToken = decryptData.accessToken;
 
     // Proceed to the next middleware or route handler
     next();

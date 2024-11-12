@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const authenticateToken = require("../middleware/authenticateToken");
 const jwt = require("jsonwebtoken");
+const crypto = require("../config/crypto");
 const router = express.Router();
 const logger = require("../config/logger").logger;
 
@@ -33,14 +34,22 @@ router.get(
   (req, res) => {
     const user = req.user; // User object from GitHub profile
     logger.debug(`/github/callback: user: ${user.username}`);
+    const sensitiveData = {
+      accessToken: user.accessToken,
+      refreshToken: user.refreshToken,
+    };
+
+    const encrypted = crypto.encrypt(JSON.stringify(sensitiveData));
 
     // Generate a JWT token
     const token = jwt.sign(
       {
         id: user.id,
         username: user.username,
-        accessToken: user.accessToken,
-        refreshToken: user.refreshToken,
+        iv: encrypted.iv,
+        data: encrypted.encryptedData,
+        // accessToken: user.accessToken,
+        // refreshToken: user.refreshToken,
         profile: {
           name: user.displayName || user.username,
           avatar_url: user._json.avatar_url,

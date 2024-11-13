@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const authenticateToken = require("../middleware/authenticateToken");
 const jwt = require("jsonwebtoken");
+const crypto = require("../config/crypto");
 const router = express.Router();
 const logger = require("../config/logger").logger;
 
@@ -26,18 +27,29 @@ router.get(
 // GitHub callback route
 router.get(
   "/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
+  passport.authenticate("github", {
+    session: false,
+    failureRedirect: "/login",
+  }),
   (req, res) => {
     const user = req.user; // User object from GitHub profile
     logger.debug(`/github/callback: user: ${user.username}`);
+    const sensitiveData = {
+      accessToken: user.accessToken,
+      refreshToken: user.refreshToken,
+    };
+
+    const encrypted = crypto.encrypt(JSON.stringify(sensitiveData));
 
     // Generate a JWT token
     const token = jwt.sign(
       {
         id: user.id,
         username: user.username,
-        accessToken: user.accessToken,
-        refreshToken: user.refreshToken,
+        iv: encrypted.iv,
+        data: encrypted.encryptedData,
+        // accessToken: user.accessToken,
+        // refreshToken: user.refreshToken,
         profile: {
           name: user.displayName || user.username,
           avatar_url: user._json.avatar_url,
@@ -50,15 +62,16 @@ router.get(
 
     // Cookie is stored on the client side so less secure
     // Set JWT in HttpOnly cookie
-    // res.cookie("token", token, {
-    //   secret: process.env.COOKIE_SECRET,
-    //   httpOnly: true,
-    //   secure: false,
-    //   sameSite: "strict",
-    // }); // Use secure: true in production with HTTPS
-    //
+    res.cookie("token", token, {
+      // secret: process.env.COOKIE_SECRET,
+      httpOnly: true,
+      secure: false,
+      // sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    }); // Use secure: true in production with HTTPS
+
     // Session is stored on the server side. The client side only has the session ID.
-    req.session.token = token;
+    // req.session.token = token;
     res.redirect("/profile"); // Redirect to frontend after login
   },
 );

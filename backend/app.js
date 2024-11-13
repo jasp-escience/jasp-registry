@@ -1,13 +1,13 @@
+const dotenv = require("dotenv");
+dotenv.config(); // Load environment variables from a .env file
 const express = require("express");
-const session = require("express-session");
+// const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
 const repositoryRoutes = require("./routes/repositoryRoutes");
 const logger = require("./config/logger").logger;
-const dotenv = require("dotenv");
-dotenv.config(); // Load environment variables from a .env file
 require("./config/passport"); // Import the Passport configuration
 
 const PORT = process.env.PORT || 8080;
@@ -18,22 +18,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public/dist")));
 
 // Session configuration
-app.use(
-  session({
-    secret: process.env.COOKIE_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // Set to true if you're using HTTPS in production
-      sameSite: "strict", // Ensures cookies are sent on cross-origin requests
-    },
-  }),
-);
+// app.use(
+//   session({
+//     secret: process.env.COOKIE_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false, // Set to true if you're using HTTPS in production
+//       sameSite: "strict", // Ensures cookies are sent on cross-origin requests
+//     },
+//   }),
+// );
+
+// Use cookie-parser middleware to parse cookies
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Initialize Passport and session handling
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 // API routes
 app.use("/api/v1/auth", authRoutes);

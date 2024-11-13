@@ -12,7 +12,9 @@
           profile.profile_url
         }}</a>
       </p>
-      <p><strong>Access Token:</strong> {{ accessToken }}</p>
+      <p><strong>Access Token:</strong></p>
+      <textarea class="jwtDisplay" v-model="accessToken" readonly></textarea>
+      <!-- <p><strong>Access Token:</strong> {{ accessToken }}</p> -->
 
       <!-- Button to redirect to /repositories if logged in -->
       <router-link to="/repositories" class="repo-button">
@@ -73,6 +75,14 @@ export default {
 
 .profile-info {
   margin-top: 20px;
+}
+
+.jwtDisplay {
+  width: 100%;
+  height: 150px; /* Adjust height as needed */
+  font-family: monospace; /* Use a monospaced font for better readability */
+  resize: none; /* Disable resizing if you want a fixed size */
+  overflow-wrap: break-word; /* Ensure long text wraps correctly */
 }
 
 .avatar {

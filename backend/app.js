@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config(); // Load environment variables from a .env file
 const express = require("express");
 // const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -6,8 +8,6 @@ const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
 const repositoryRoutes = require("./routes/repositoryRoutes");
 const logger = require("./config/logger").logger;
-const dotenv = require("dotenv");
-dotenv.config(); // Load environment variables from a .env file
 require("./config/passport"); // Import the Passport configuration
 
 const PORT = process.env.PORT || 8080;

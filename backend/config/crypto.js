@@ -2,7 +2,7 @@
 const crypto = require("crypto");
 
 // Secret key for AES encryption (Use environment variables in production)
-const aesSecretKey = crypto.randomBytes(32); // 256-bit key for AES-256
+const aesSecretKey = Buffer.from(process.env.JWT_ENCRYPTION_KEY, "hex");
 
 // AES Encryption Function
 function encrypt(data) {

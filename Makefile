@@ -93,13 +93,13 @@ _kill:
 	-ps aux | grep 'node backend/app.js' | grep -v grep | awk '{print $$2}' | xargs kill -9 > /dev/null 2>&1
 
 .PHONY: run-remote
-run-remote: frontend deploy
+run-remote: deploy
 	 #ssh $(REMOTE_HOST) "source ~/.bashrc; cd $(REMOTE_DIR); make run"
 	 ssh -t $(REMOTE_HOST) "cd $(REMOTE_DIR); make _run-remote"
 
 # Step to deploy the project, build it remotely, and run it remotely
 .PHONY: deploy
-deploy:
+deploy: frontend
 	# Use rsync to copy project to remote server, excluding the target folder
 	rsync -av --exclude node_modules $(PROJECT_DIR)/ $(REMOTE_HOST):$(REMOTE_DIR)
 

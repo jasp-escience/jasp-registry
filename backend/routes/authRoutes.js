@@ -63,11 +63,10 @@ router.get(
     // Cookie is stored on the client side so less secure
     // Set JWT in HttpOnly cookie
     res.cookie("token", token, {
-      // secret: process.env.COOKIE_SECRET,
       httpOnly: true,
-      secure: false,
-      // sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      secure: true,
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000, // 15 minutes
     }); // Use secure: true in production with HTTPS
 
     // Session is stored on the server side. The client side only has the session ID.

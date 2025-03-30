@@ -7,6 +7,7 @@ const path = require("path");
 const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
 const repositoryRoutes = require("./routes/repositoryRoutes");
+const modulesRoutes = require("./routes/modulesRoutes");
 const logger = require("./config/logger").logger;
 require("./config/passport"); // Import the Passport configuration
 
@@ -41,6 +42,7 @@ app.use(passport.initialize());
 // API routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/repositories", repositoryRoutes);
+app.use("/api/v1/modules", modulesRoutes);
 
 // Catch-all route to serve the Vue app's index.html file
 // This allows Vue Router to handle any client-side routes

@@ -1,6 +1,6 @@
 # jasp-registry
 
-This repository contains the JASP registry server, which serves JASP modules that are available for download. 
+This repository contains the JASP registry server, which serves JASP modules that are available for download.
 The registry is used by the JASP application to display a list of available modules and to download them.
 
 ## Setup
@@ -18,11 +18,27 @@ COOKIE_SECRET=*************
 COOKIE_EXPIRATION=****
 ```
 
-## Run 
+## Build
+
+### Backend
+
+```bash
+make build
+make install
+```
+
+### Frontend
+
+```bash
+make frontend
+```
+
+## Run
 
 ### Using Docker
 
-Pre-requisites: 
+Pre-requisites:
+
 - [Docker](https://www.docker.com/)
 
 Use the following command:
@@ -33,7 +49,8 @@ make run-docker
 
 ### Without Docker
 
-Pre-requisites: 
+Pre-requisites:
+
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Node.js v22](https://nodejs.org/)
 

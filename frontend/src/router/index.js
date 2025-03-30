@@ -2,9 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import Repositories from "../views/Repositories.vue";
 import Profile from "../views/Profile.vue";
+import Modules from "../views/Modules.vue";
 
 const routes = [
-  { path: "/", name: "Login", component: Login },
+  { path: "/", name: "Modules", component: Modules },
+  { path: "/Login", name: "Login", component: Login },
   { path: "/profile", name: "Profile", component: Profile },
   { path: "/repositories", name: "Repositories", component: Repositories },
 ];

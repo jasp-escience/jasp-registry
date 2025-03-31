@@ -6,7 +6,8 @@ import Modules from "../views/Modules.vue";
 
 const routes = [
   { path: "/", name: "Modules", component: Modules },
-  { path: "/Login", name: "Login", component: Login },
+  { path: "/modules", name: "Modules", component: Modules },
+  { path: "/login", name: "Login", component: Login },
   { path: "/profile", name: "Profile", component: Profile },
   { path: "/repositories", name: "Repositories", component: Repositories },
 ];
